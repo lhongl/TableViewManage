@@ -1,23 +1,27 @@
 //
-//  FDSection.m
-//  TSTST
+//  DACollectionSection.m
+//  ProjectTemplate
 //
-//  Created by 飞渡 on 2019/6/27.
-//  Copyright © 2019 freedo. All rights reserved.
+//  Created by lihongliang on 2019/6/29.
+//  Copyright © 2019年 李宏亮. All rights reserved.
 //
 
-#import "FDSection.h"
-@interface FDSection ()
+#import "DACollectionSection.h"
+@interface DACollectionSection ()
 
-@property (nonatomic, strong) NSMutableArray <FDItem *> *dataArray;
+@property (nonatomic, strong) NSMutableArray <DACollectionItem *> *dataArray;
 
 @end
 
-@implementation FDSection
+@implementation DACollectionSection
+
 - (instancetype)init{
     if (self = [super init]) {
-        self.headerHeight = 0;
-        self.footerHeight = 0;
+        self.sectionFooterSize = CGSizeMake(CGFLOAT_MAX, 44);
+        self.sectionHeaderSize = CGSizeMake(CGFLOAT_MAX, 44);
+        self.sectionLayoutEdgeInsets = UIEdgeInsetsMake(0,0,0,0);
+        self.sectionMinimumLineSpacingForSection = 0;
+        self.sectionMinimumInteritemSpacingForSection = 0;
     }
     return self;
 }
@@ -32,18 +36,18 @@
     }
 }
 
-- (void)remoVeItemWithArray:(NSArray <FDItem *>*)array{
+- (void)remoVeItemWithArray:(NSArray <DACollectionItem *>*)array{
     if (array.count == 0) {
         return;
     }
     [self.dataArray removeObjectsInArray:array];
 }
 
-- (void)removeItem:(FDItem *)item{
+- (void)removeItem:(DACollectionItem *)item{
     
     if (!item) {
 #ifdef DEBUG
-      NSAssert(item, @"item not Null");
+        NSAssert(item, @"item not Null");
 #endif
         return;
     }
@@ -51,15 +55,15 @@
 }
 
 #pragma mark itemList
-- (NSArray <FDItem *> *)itemList{
-
+- (NSArray <DACollectionItem *> *)itemList{
+    
     return _dataArray;
 }
 
 #pragma mark 添加item
-- (void)addItem:(FDItem *)item{
+- (void)addItem:(DACollectionItem *)item{
 #ifdef DEBUG
-   NSAssert(item, @"item not Null");
+    NSAssert(item, @"item not Null");
 #endif
     if (!item) {
         return;
@@ -67,7 +71,7 @@
     [self.dataArray addObject:item];
 }
 
-- (void)insertItem:(FDItem *)item atIndex:(NSUInteger)idx{
+- (void)insertItem:(DACollectionItem *)item atIndex:(NSUInteger)idx{
     if (!item) {
 #ifdef DEBUG
         NSAssert(item, @"item Not Null");
@@ -84,7 +88,7 @@
     [self.dataArray insertObject:item atIndex:idx];
 }
 
-- (void)addItemFromArray:(NSArray <FDItem *>*)array{
+- (void)addItemFromArray:(NSArray <DACollectionItem *>*)array{
     if (array.count == 0) {
         return;
     }
@@ -92,11 +96,10 @@
 }
 
 #pragma mark 懒加载
-- (NSMutableArray <FDItem *>*)dataArray{
+- (NSMutableArray <DACollectionItem *>*)dataArray{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
-
 @end

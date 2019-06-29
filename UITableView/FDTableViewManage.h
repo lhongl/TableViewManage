@@ -2,8 +2,8 @@
 //  FDTableViewManage.h
 //  TSTST
 //
-//  Created by 飞渡 on 2019/6/28.
-//  Copyright © 2019 freedo. All rights reserved.
+//  Created by lihongliang on 2019/6/28.
+//  Copyright © 2019 lihongliang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

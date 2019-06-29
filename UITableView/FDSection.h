@@ -2,8 +2,8 @@
 //  FDSection.h
 //  TSTST
 //
-//  Created by 飞渡 on 2019/6/27.
-//  Copyright © 2019 freedo. All rights reserved.
+//  Created by lihongliang on 2019/6/27.
+//  Copyright © 2019 lihongliang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,9 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat headerHeight; //headerView高度
 
-@property (nonatomic, copy) UIView * (^sectionHeaderView)(NSInteger section);//与系统注册对应headerView
-
 @property (nonatomic, assign) CGFloat footerHeight; //footerView高度
+
+//*******************系统自带注册方式*****************
+@property (nonatomic, copy) UIView * (^sectionHeaderView)(NSInteger section);//与系统注册对应headerView
 
 @property (nonatomic, copy) UIView * (^sectionFooterView)(NSInteger section);//与系统注册对应footerView
 
@@ -27,6 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString * (^sectionFooterTitle)(NSInteger section); //footer
 
+//****************自定义header和footer注册**************
+@property (nonatomic, copy) Class (^sectionCustomHeaderView)(NSInteger section);
+
+@property (nonatomic, copy) void (^sectionCustomHeaderViewBlock)(UIView *headerView ,NSInteger section);//返回，可以作为赋值使用
+
+@property (nonatomic, copy) Class (^sectionCustomFooterView)(NSInteger section);
+
+@property (nonatomic, copy) void (^sectionCustomFooterViewBlock)(UIView *headerView ,NSInteger section);//返回，可以作为赋值使用
 /**
  删除item
  */

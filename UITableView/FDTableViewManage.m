@@ -2,8 +2,8 @@
 //  FDTableViewManage.m
 //  TSTST
 //
-//  Created by 飞渡 on 2019/6/28.
-//  Copyright © 2019 freedo. All rights reserved.
+//  Created by lihongliang on 2019/6/28.
+//  Copyright © 2019 lihongliang. All rights reserved.
 //
 
 #import "FDTableViewManage.h"
@@ -136,11 +136,17 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    
+    if (fdSection.sectionCustomHeaderView && fdSection.sectionCustomHeaderView(section)) {
+        NSString *identifier = NSStringFromClass(fdSection.sectionCustomHeaderView(section));
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+        if (fdSection.sectionCustomHeaderViewBlock) {
+            fdSection.sectionCustomHeaderViewBlock(headerView, section);
+        }
+        return headerView;
+    }
     if (fdSection.sectionHeaderView) {
         return fdSection.sectionHeaderView(section);
     }
-
     return nil;
 }
 
@@ -159,6 +165,15 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
+    if (fdSection.sectionCustomFooterView && fdSection.sectionCustomFooterView(section)) {
+        NSString *identifier = NSStringFromClass(fdSection.sectionCustomFooterView(section));
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+        if (fdSection.sectionCustomFooterViewBlock) {
+            fdSection.sectionCustomFooterViewBlock(headerView, section);
+        }
+        return headerView;
+    }
+    
     if (fdSection.sectionFooterView) {
         return fdSection.sectionFooterView(section);
     }

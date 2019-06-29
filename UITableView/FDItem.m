@@ -2,8 +2,8 @@
 //  FDItem.m
 //  TSTST
 //
-//  Created by 飞渡 on 2019/6/27.
-//  Copyright © 2019 freedo. All rights reserved.
+//  Created by lihongliang on 2019/6/27.
+//  Copyright © 2019 lihongliang. All rights reserved.
 //
 
 #import "FDItem.h"
