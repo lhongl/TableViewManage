@@ -20,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *sectionFooterIdent; //footer的ident
 
-@property (nonatomic, copy) FDSectionHeaderHeight headerHeight; //headerView高度
+@property (nonatomic, assign) CGFloat headerHeight; //headerView高度
 
-@property (nonatomic, copy) FDSectionFooterHeight footerHeight; //footerView高度
+@property (nonatomic, assign) CGFloat footerHeight; //footerView高度
 
 @property (nonatomic, copy) FDSectionHeaderView sectionHeaderView;//返回对应headerView
 

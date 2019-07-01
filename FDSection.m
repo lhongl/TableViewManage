@@ -25,6 +25,8 @@
             NSString *footerIdentifier = NSStringFromClass(footerClass);
             self.sectionFooterIdent = footerIdentifier;
         }
+        self.headerHeight = 0.0f;
+        self.footerHeight = 0.0f;
     }
     return self;
 }

@@ -158,10 +158,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.headerHeight) {
-        return fdSection.headerHeight(section);
-    }
-    return 0.0f;
+    return fdSection.headerHeight;
 }
 
 
@@ -190,10 +187,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.footerHeight) {
-        return fdSection.footerHeight(section);
-    }
-    return 0.0f;
+    return fdSection.footerHeight;
 }
 
 - (NSArray*)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
