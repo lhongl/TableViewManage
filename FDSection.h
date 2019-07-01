@@ -9,33 +9,40 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "FDItem.h"
+#import "FDSectionHeader.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FDSection : NSObject
 
 @property (nonatomic, strong, readonly) NSArray <FDItem *> *itemList;
 
-@property (nonatomic, assign) CGFloat headerHeight; //headerView高度
+@property (nonatomic, copy) NSString *sectionHeaderIdent; //header的ident
 
-@property (nonatomic, assign) CGFloat footerHeight; //footerView高度
+@property (nonatomic, copy) NSString *sectionFooterIdent; //footer的ident
 
-//*******************系统自带注册方式*****************
-@property (nonatomic, copy) UIView * (^sectionHeaderView)(NSInteger section);//与系统注册对应headerView
+@property (nonatomic, copy) FDSectionHeaderHeight headerHeight; //headerView高度
 
-@property (nonatomic, copy) UIView * (^sectionFooterView)(NSInteger section);//与系统注册对应footerView
+@property (nonatomic, copy) FDSectionFooterHeight footerHeight; //footerView高度
 
-@property (nonatomic, copy) NSString * (^sectionHeaderTitle)(NSInteger section); //header
+@property (nonatomic, copy) FDSectionHeaderView sectionHeaderView;//返回对应headerView
 
-@property (nonatomic, copy) NSString * (^sectionFooterTitle)(NSInteger section); //footer
+@property (nonatomic, copy) FDSectionFooterView sectionFooterView;//返回对应footerView
 
-//****************自定义header和footer注册**************
-@property (nonatomic, copy) Class (^sectionCustomHeaderView)(NSInteger section);
+@property (nonatomic, copy) FDSectionHeaderTitle sectionHeaderTitle; //headerTitle
 
-@property (nonatomic, copy) void (^sectionCustomHeaderViewBlock)(UIView *headerView ,NSInteger section);//返回，可以作为赋值使用
+@property (nonatomic, copy) FDSectionFooterTitle sectionFooterTitle; //footerTitle
 
-@property (nonatomic, copy) Class (^sectionCustomFooterView)(NSInteger section);
+/**
+ 初始化section
 
-@property (nonatomic, copy) void (^sectionCustomFooterViewBlock)(UIView *headerView ,NSInteger section);//返回，可以作为赋值使用
+ @param headerClass header类
+ @param footerClass footer类
+ @return  instancetype
+ */
+- (instancetype)initSectionWithSectionHeaderClass:(nullable Class)headerClass sectionFooterClass:(nullable Class)footerClass;
+
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 /**
  删除item
  */

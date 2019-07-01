@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)registerHeaderFooterViewWithClass:(nullable Class)aClass;
 
+
 /**
  添加section
  

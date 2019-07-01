@@ -14,13 +14,21 @@
 @end
 
 @implementation FDSection
-- (instancetype)init{
+
+- (instancetype)initSectionWithSectionHeaderClass:(nullable Class)headerClass sectionFooterClass:(nullable Class)footerClass{
     if (self = [super init]) {
-        self.headerHeight = 0;
-        self.footerHeight = 0;
+        if (headerClass) {
+          NSString *headerIdentifier = NSStringFromClass(headerClass);
+          self.sectionHeaderIdent = headerIdentifier;
+        }
+        if (footerClass) {
+            NSString *footerIdentifier = NSStringFromClass(footerClass);
+            self.sectionFooterIdent = footerIdentifier;
+        }
     }
     return self;
 }
+
 #pragma mark 删除item
 - (void)removeAllItem{
     [self.dataArray removeAllObjects];

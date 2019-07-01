@@ -136,16 +136,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionCustomHeaderView && fdSection.sectionCustomHeaderView(section)) {
-        NSString *identifier = NSStringFromClass(fdSection.sectionCustomHeaderView(section));
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
-        if (fdSection.sectionCustomHeaderViewBlock) {
-            fdSection.sectionCustomHeaderViewBlock(headerView, section);
+    if (fdSection.sectionHeaderIdent.length != 0) {
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionHeaderIdent];
+        if (fdSection.sectionHeaderView) {
+            fdSection.sectionHeaderView(headerView, section);
         }
         return headerView;
-    }
-    if (fdSection.sectionHeaderView) {
-        return fdSection.sectionHeaderView(section);
     }
     return nil;
 }
@@ -161,24 +157,23 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
-    return self.dataArray[section].headerHeight;
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.headerHeight) {
+        return fdSection.headerHeight(section);
+    }
+    return 0.0f;
 }
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionCustomFooterView && fdSection.sectionCustomFooterView(section)) {
-        NSString *identifier = NSStringFromClass(fdSection.sectionCustomFooterView(section));
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
-        if (fdSection.sectionCustomFooterViewBlock) {
-            fdSection.sectionCustomFooterViewBlock(headerView, section);
+    if (fdSection.sectionFooterIdent.length != 0) {
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionFooterIdent];
+        if (fdSection.sectionFooterView) {
+            fdSection.sectionFooterView(headerView, section);
         }
         return headerView;
-    }
-    
-    if (fdSection.sectionFooterView) {
-        return fdSection.sectionFooterView(section);
     }
     
     return nil;
@@ -194,7 +189,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
-    return self.dataArray[section].footerHeight;
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.footerHeight) {
+        return fdSection.footerHeight(section);
+    }
+    return 0.0f;
 }
 
 - (NSArray*)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
