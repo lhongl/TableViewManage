@@ -151,8 +151,11 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    
-    return self.dataArray[section].sectionFooterTitle(section);
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.sectionHeaderTitle) {
+        return fdSection.sectionHeaderTitle(section);
+    }
+    return nil;
 }
 
 
@@ -182,7 +185,11 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    return self.dataArray[section].sectionHeaderTitle(section);
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.sectionFooterTitle) {
+        return fdSection.sectionFooterTitle(section);
+    }
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
