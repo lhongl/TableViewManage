@@ -15,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat rowHeight;
 
-@property (nonatomic, copy) NSString *cellIdentifier;
-
 @property (nonatomic, copy) void (^cellConfiguration)(__kindof FDTableViewManage *tableVieManager,__kindof UITableViewCell *cell,__kindof FDItem *item); //加载数据
 
 @property (nonatomic, copy) void (^didSelectRow)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item); //点击
@@ -33,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
  返回数据
  */
 - (id)data;
+
+/**
+ cell注册
+ */
+- (NSString *)cellIdentifier;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -16,10 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSArray <FDItem *> *itemList;
 
-@property (nonatomic, copy) NSString *sectionHeaderIdent; //header的ident
-
-@property (nonatomic, copy) NSString *sectionFooterIdent; //footer的ident
-
 @property (nonatomic, assign) CGFloat headerHeight; //headerView高度
 
 @property (nonatomic, assign) CGFloat footerHeight; //footerView高度
@@ -64,7 +60,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addItemFromArray:(NSArray <FDItem *>*)array;
 
+/**
+ 获取section footer 注册idnet
+ */
+- (NSString *)sectionFooterIdent;
 
+/**
+ 获取section header 注册idnet
+ */
+- (NSString *)sectionHeaderIdent;
 @end
 
 NS_ASSUME_NONNULL_END

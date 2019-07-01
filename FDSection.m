@@ -11,6 +11,10 @@
 
 @property (nonatomic, strong) NSMutableArray <FDItem *> *dataArray;
 
+@property (nonatomic, copy) NSString *sectionHeaderIdent; //header的ident
+
+@property (nonatomic, copy) NSString *sectionFooterIdent; //footer的ident
+
 @end
 
 @implementation FDSection
@@ -99,6 +103,16 @@
         return;
     }
     [self.dataArray addObjectsFromArray:array];
+}
+
+- (NSString *)sectionFooterIdent{
+    
+    return _sectionFooterIdent;
+}
+
+- (NSString *)sectionHeaderIdent{
+    
+    return _sectionHeaderIdent;
 }
 
 #pragma mark 懒加载

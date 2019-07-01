@@ -105,7 +105,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FDSection *fdSection = self.dataArray[indexPath.section];
     FDItem *item  = fdSection.itemList[indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:item.cellIdentifier forIndexPath:indexPath];
+    NSString *ident = [item cellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident forIndexPath:indexPath];
     if (item.cellConfiguration) {
         item.cellConfiguration(self, cell, item);
     }
@@ -136,8 +137,9 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionHeaderIdent.length != 0) {
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionHeaderIdent];
+    NSString *ident = [fdSection sectionHeaderIdent];
+    if (ident.length != 0) {
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:ident];
         if (fdSection.sectionHeaderView) {
             fdSection.sectionHeaderView(headerView, section);
         }
@@ -165,8 +167,9 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionFooterIdent.length != 0) {
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionFooterIdent];
+    NSString *ident = [fdSection sectionFooterIdent];
+    if (ident.length != 0) {
+        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:ident];
         if (fdSection.sectionFooterView) {
             fdSection.sectionFooterView(headerView, section);
         }

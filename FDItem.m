@@ -12,6 +12,9 @@
 {
     id _data;
 }
+
+@property (nonatomic, copy) NSString *cellIdentifier;
+
 @end
 
 @implementation FDItem
@@ -28,5 +31,10 @@
 
 - (id)data{
     return _data;
+}
+
+- (NSString *)cellIdentifier{
+    
+    return _cellIdentifier;
 }
 @end
