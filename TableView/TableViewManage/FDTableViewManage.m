@@ -45,7 +45,7 @@
 }
 
 #pragma mark 添加section
-- (void)addSection:(FDSection *)section{
+- (void)addSection:(nullable FDSection *)section{
     if (!section) {
 #ifdef DEBUG
         NSAssert(section, @"section Not Null");
@@ -55,7 +55,7 @@
     [self.dataArray addObject:section];
 }
 
-- (void)addSection:(FDSection *)section atIndex:(NSUInteger)idx{
+- (void)addSection:(nullable FDSection *)section atIndex:(NSUInteger)idx{
     if (!section) {
 #ifdef DEBUG
         NSAssert(section, @"section Not Null");
@@ -77,7 +77,7 @@
     [self.dataArray removeAllObjects];
 }
 
-- (void)remoVeSection:(FDSection *)section{
+- (void)remoVeSection:(nullable FDSection *)section{
     if (!section) {
         return;
     }
@@ -120,6 +120,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     FDSection *fdSection = self.dataArray[indexPath.section];
     FDItem *item  = fdSection.itemList[indexPath.row];
     if (item.didSelectRow) {

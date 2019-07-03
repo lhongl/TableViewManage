@@ -30,14 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  初始化section
+ */
 
++ (instancetype)section;
+
+/**
  @param headerClass header类
  @param footerClass footer类
- @return  instancetype
  */
-- (instancetype)initSectionWithSectionHeaderClass:(nullable Class)headerClass sectionFooterClass:(nullable Class)footerClass;
-
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass;
 
 /**
  删除item
@@ -48,15 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)remoVeItemWithArray:(NSArray <FDItem *>*)array;
 
-- (void)removeItem:(FDItem *)item;
+- (void)removeItem:(nullable FDItem *)item;
 
 
 /**
  添加item
  */
-- (void)addItem:(FDItem *)item;
+- (void)addItem:(nullable FDItem *)item;
 
-- (void)insertItem:(FDItem *)item atIndex:(NSUInteger)idx;
+- (void)insertItem:(nullable FDItem *)item atIndex:(NSUInteger)idx;
 
 - (void)addItemFromArray:(NSArray <FDItem *>*)array;
 

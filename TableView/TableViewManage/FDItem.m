@@ -19,7 +19,7 @@
 
 @implementation FDItem
 
-- (instancetype)initWithData:(id)data cellClass:(nullable Class)cellClass{
+- (instancetype)initWithData:(nullable id)data cellClass:(nullable Class)cellClass{
     if (self = [super init]) {
         self.rowHeight = 44;
         _data = data;

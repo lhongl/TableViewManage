@@ -18,21 +18,28 @@
 @end
 
 @implementation FDSection
++ (instancetype)section{
+    
+    return [[self alloc] init];
+}
 
-- (instancetype)initSectionWithSectionHeaderClass:(nullable Class)headerClass sectionFooterClass:(nullable Class)footerClass{
+- (instancetype)init{
     if (self = [super init]) {
-        if (headerClass) {
-          NSString *headerIdentifier = NSStringFromClass(headerClass);
-          self.sectionHeaderIdent = headerIdentifier;
-        }
-        if (footerClass) {
-            NSString *footerIdentifier = NSStringFromClass(footerClass);
-            self.sectionFooterIdent = footerIdentifier;
-        }
         self.headerHeight = 0.0f;
         self.footerHeight = 0.0f;
     }
     return self;
+}
+
+- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass{
+    if (headerClass) {
+      NSString *headerIdentifier = NSStringFromClass(headerClass);
+      self.sectionHeaderIdent = headerIdentifier;
+    }
+    if (footerClass) {
+        NSString *footerIdentifier = NSStringFromClass(footerClass);
+        self.sectionFooterIdent = footerIdentifier;
+    }
 }
 
 #pragma mark 删除item
@@ -53,7 +60,7 @@
     [self.dataArray removeObjectsInArray:array];
 }
 
-- (void)removeItem:(FDItem *)item{
+- (void)removeItem:(nullable FDItem *)item{
     
     if (!item) {
 #ifdef DEBUG
@@ -71,7 +78,7 @@
 }
 
 #pragma mark 添加item
-- (void)addItem:(FDItem *)item{
+- (void)addItem:(nullable FDItem *)item{
 #ifdef DEBUG
    NSAssert(item, @"item not Null");
 #endif
@@ -81,7 +88,7 @@
     [self.dataArray addObject:item];
 }
 
-- (void)insertItem:(FDItem *)item atIndex:(NSUInteger)idx{
+- (void)insertItem:(nullable FDItem *)item atIndex:(NSUInteger)idx{
     if (!item) {
 #ifdef DEBUG
         NSAssert(item, @"item Not Null");

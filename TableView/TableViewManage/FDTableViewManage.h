@@ -59,14 +59,14 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param section 添加section
  */
-- (void)addSection:(FDSection *)section;
+- (void)addSection:(nullable FDSection *)section;
 
-- (void)addSection:(FDSection *)section atIndex:(NSUInteger)idx;
+- (void)addSection:(nullable FDSection *)section atIndex:(NSUInteger)idx;
 
 /**
  删除
  */
-- (void)remoVeSection:(FDSection *)section;
+- (void)remoVeSection:(nullable FDSection *)section;
 
 - (void)removeAllSection;
 
