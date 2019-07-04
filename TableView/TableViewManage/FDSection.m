@@ -11,9 +11,9 @@
 
 @property (nonatomic, strong) NSMutableArray <FDItem *> *dataArray;
 
-@property (nonatomic, copy) NSString *sectionHeaderIdent; //header的ident
+@property (nonatomic, copy) NSString *headerIdent; //header的ident
 
-@property (nonatomic, copy) NSString *sectionFooterIdent; //footer的ident
+@property (nonatomic, copy) NSString *footerIdent; //footer的ident
 
 @end
 
@@ -25,8 +25,8 @@
 
 - (instancetype)init{
     if (self = [super init]) {
-        self.headerHeight = 0.0f;
-        self.footerHeight = 0.0f;
+        self.heightForFooter = 0.0f;
+        self.heightForFooter = 0.0f;
     }
     return self;
 }
@@ -34,11 +34,11 @@
 - (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass{
     if (headerClass) {
       NSString *headerIdentifier = NSStringFromClass(headerClass);
-      self.sectionHeaderIdent = headerIdentifier;
+      self.headerIdent = headerIdentifier;
     }
     if (footerClass) {
         NSString *footerIdentifier = NSStringFromClass(footerClass);
-        self.sectionFooterIdent = footerIdentifier;
+        self.footerIdent = footerIdentifier;
     }
 }
 
@@ -114,12 +114,12 @@
 
 - (NSString *)sectionFooterIdent{
     
-    return _sectionFooterIdent;
+    return self.headerIdent;
 }
 
 - (NSString *)sectionHeaderIdent{
     
-    return _sectionHeaderIdent;
+    return self.footerIdent;
 }
 
 #pragma mark 懒加载

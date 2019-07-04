@@ -13,7 +13,7 @@
     id _data;
 }
 
-@property (nonatomic, copy) NSString *cellIdentifier;
+@property (nonatomic, copy) NSString *identifier;
 
 @end
 
@@ -24,7 +24,7 @@
         self.rowHeight = 44;
         _data = data;
         NSString *cellIdent = NSStringFromClass(cellClass);
-        self.cellIdentifier = cellIdent;
+        self.identifier = cellIdent;
     }
     return self;
 }
@@ -35,6 +35,6 @@
 
 - (NSString *)cellIdentifier{
     
-    return _cellIdentifier;
+    return self.identifier;
 }
 @end

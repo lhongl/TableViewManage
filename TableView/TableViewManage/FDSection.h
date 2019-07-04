@@ -16,29 +16,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSArray <FDItem *> *itemList;
 
-@property (nonatomic, assign) CGFloat headerHeight; //headerView高度
+@property (nonatomic, copy, readonly) NSString *sectionHeaderIdent;
 
-@property (nonatomic, assign) CGFloat footerHeight; //footerView高度
+@property (nonatomic, copy, readonly) NSString *sectionFooterIdent;
 
-@property (nonatomic, copy) FDSectionHeaderView sectionHeaderView;//返回对应headerView
+@property (nonatomic, assign) CGFloat heightForHeader; //headerView高度
 
-@property (nonatomic, copy) FDSectionFooterView sectionFooterView;//返回对应footerView
+@property (nonatomic, assign) CGFloat heightForFooter; //footerView高度
 
-@property (nonatomic, copy) FDSectionHeaderTitle sectionHeaderTitle; //headerTitle
+@property (nonatomic, copy) FDSectionTitleForHeader titleForHeader; //headerTitle
 
-@property (nonatomic, copy) FDSectionFooterTitle sectionFooterTitle; //footerTitle
+@property (nonatomic, copy) FDSectionTitleForFooter titleForFooter; //footerTitle
+
+@property (nonatomic, copy) FDSectionWillDisplayHeaderView willDisplayHeaderView;
+
+@property (nonatomic, copy) FDSectionWillDisplayFooterView willDisplayFooterView;
+
+@property (nonatomic, copy) FDSectionDidEndDisplayingHeaderView didEndDisplayingHeaderView;
+
+@property (nonatomic, copy) FDSectionDidEndDisplayingFooterView didEndDisplayingFooterView;
+
+@property (nonatomic, copy) FDSectionCustomViewForHeader customViewForHeader;
+
+@property (nonatomic, copy) FDSectionCustomViewForFooter customViewForFooter;
+
 
 /**
  初始化section
  */
 
 + (instancetype)section;
-
-/**
- @param headerClass header类
- @param footerClass footer类
- */
-- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass;
 
 /**
  删除item
@@ -61,15 +68,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addItemFromArray:(NSArray <FDItem *>*)array;
 
-/**
- 获取section footer 注册idnet
- */
-- (NSString *)sectionFooterIdent;
+
+// ***************************复用 返回headerView和footerView【下方法和属性配合使用】********************
 
 /**
- 获取section header 注册idnet
+  FDSectionHeaderView和FDSectionFooterView
+ 【说明】- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass; 属性则无效
  */
-- (NSString *)sectionHeaderIdent;
+@property (nonatomic, copy) FDSectionViewForHeader viewForHeader;//返回对应headerView
+
+@property (nonatomic, copy) FDSectionViewForFooter viewForFooter;//返回对应footerView
+
+/**
+  复用header和footer
+ @param headerClass header类
+ @param footerClass footer类
+ */
+- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass;
+
 @end
 
 NS_ASSUME_NONNULL_END

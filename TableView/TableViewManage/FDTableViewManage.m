@@ -17,9 +17,11 @@
 #pragma mark 初始化
 - (instancetype)initTableViewManage:(UITableView *)tableView {
     if (self = [super init]) {
-        self.tableView = tableView;
-        tableView.delegate = self;
-        tableView.dataSource = self;
+        if (tableView) {
+            self.tableView = tableView;
+            tableView.delegate = self;
+            tableView.dataSource = self;
+        }
     }
     return self;
 }
@@ -102,11 +104,52 @@
     return self.dataArray.count;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    FDSection *fdSection = self.dataArray[indexPath.section];
+    FDItem *item  = fdSection.itemList[indexPath.row];
+    if (item.willDisplayCellRow) {
+        item.willDisplayCellRow(self, indexPath, item,cell);
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
+    FDSection *fdSection = self.dataArray[indexPath.section];
+    FDItem *item  = fdSection.itemList[indexPath.row];
+    if (item.didEndDisplayingCellRow) {
+        item.didEndDisplayingCellRow(self, indexPath, item,cell);
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.willDisplayHeaderView) {
+        fdSection.willDisplayHeaderView(section,view);
+    }
+}
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.willDisplayFooterView) {
+        fdSection.willDisplayFooterView(section,view);
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section {
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.didEndDisplayingHeaderView) {
+        fdSection.didEndDisplayingHeaderView(section,view);
+    }
+}
+- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section {
+    FDSection *fdSection = self.dataArray[section];
+    if (fdSection.didEndDisplayingFooterView) {
+        fdSection.didEndDisplayingFooterView(section,view);
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FDSection *fdSection = self.dataArray[indexPath.section];
     FDItem *item  = fdSection.itemList[indexPath.row];
-    NSString *ident = [item cellIdentifier];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:item.cellIdentifier forIndexPath:indexPath];
     if (item.cellConfiguration) {
         item.cellConfiguration(self, cell, item);
     }
@@ -138,21 +181,25 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    NSString *ident = [fdSection sectionHeaderIdent];
-    if (ident.length != 0) {
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:ident];
-        if (fdSection.sectionHeaderView) {
-            fdSection.sectionHeaderView(headerView, section);
-        }
-        return headerView;
+    
+    if (fdSection.customViewForHeader) {
+        return fdSection.customViewForHeader(section);
     }
-    return nil;
+    
+    if (fdSection.sectionHeaderIdent.length == 0) {
+        return nil;
+    }
+    UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionHeaderIdent];
+    if (fdSection.viewForHeader) {
+        fdSection.viewForHeader(headerView, section);
+    }
+    return headerView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionHeaderTitle) {
-        return fdSection.sectionHeaderTitle(section);
+    if (fdSection.titleForHeader) {
+        return fdSection.titleForHeader(section);
     }
     return nil;
 }
@@ -161,29 +208,32 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    return fdSection.headerHeight;
+    return fdSection.heightForHeader;
 }
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    
+
     FDSection *fdSection = self.dataArray[section];
-    NSString *ident = [fdSection sectionFooterIdent];
-    if (ident.length != 0) {
-        UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:ident];
-        if (fdSection.sectionFooterView) {
-            fdSection.sectionFooterView(headerView, section);
-        }
-        return headerView;
+    
+    if (fdSection.customViewForFooter) {
+        return fdSection.customViewForFooter(section);
     }
     
-    return nil;
+    if (fdSection.sectionFooterIdent.length == 0) {
+        return nil;
+    }
+    UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionFooterIdent];
+    if (fdSection.viewForFooter) {
+         fdSection.viewForFooter(headerView, section);
+    }
+    return headerView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
     FDSection *fdSection = self.dataArray[section];
-    if (fdSection.sectionFooterTitle) {
-        return fdSection.sectionFooterTitle(section);
+    if (fdSection.titleForFooter) {
+        return fdSection.titleForFooter(section);
     }
     return nil;
 }
@@ -191,7 +241,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    return fdSection.footerHeight;
+    return fdSection.heightForFooter;
 }
 
 - (NSArray*)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

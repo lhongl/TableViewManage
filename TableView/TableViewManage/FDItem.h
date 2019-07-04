@@ -8,20 +8,27 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "FDItemHeader.h"
 @class FDTableViewManage;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FDItem : NSObject
 
+@property (nonatomic, copy, readonly) NSString *cellIdentifier;
+
 @property (nonatomic, assign) CGFloat rowHeight;
 
-@property (nonatomic, copy) void (^cellConfiguration)(__kindof FDTableViewManage *tableVieManager,__kindof UITableViewCell *cell,__kindof FDItem *item); //加载数据
+@property (nonatomic, copy) FDItemCellConfiguration cellConfiguration; //加载数据
 
-@property (nonatomic, copy) void (^didSelectRow)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item); //点击
+@property (nonatomic, copy) FDItemDidSelectRow didSelectRow; //点击
 
-@property (nonatomic, copy) void (^didDeselectRow)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item); //点击
+@property (nonatomic, copy) FDItemDidDeselectRow didDeselectRow; //已经点击
 
-@property (nonatomic, copy) NSArray <UITableViewRowAction *> *(^editActions)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item); //侧滑
+@property (nonatomic, copy) FDItemWillDisplayCellRow willDisplayCellRow;
+
+@property (nonatomic, copy) FDItemDidEndDisplayingCell didEndDisplayingCellRow;
+
+@property (nonatomic, copy) FDItemEditActions editActions; //侧滑
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
@@ -39,10 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (id)data;
 
-/**
- cell注册
- */
-- (NSString *)cellIdentifier;
 @end
 
 NS_ASSUME_NONNULL_END

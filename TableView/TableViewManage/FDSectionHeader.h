@@ -10,17 +10,24 @@
 #define FDSectionHeader_h
 #import <Foundation/Foundation.h>
 
-typedef CGFloat (^FDSectionHeaderHeight)(NSInteger section);//header高
+typedef void (^FDSectionViewForHeader)(UIView *headerView ,NSInteger section); 
 
-typedef CGFloat (^FDSectionFooterHeight)(NSInteger section);//footer高
+typedef void *(^FDSectionViewForFooter)(UIView *headerView ,NSInteger section);
 
-typedef void (^FDSectionHeaderView)(UIView *headerView ,NSInteger section);
+typedef NSString *(^FDSectionTitleForHeader)(NSInteger section); //header
 
-typedef void *(^FDSectionFooterView)(UIView *headerView ,NSInteger section);
+typedef NSString * (^FDSectionTitleForFooter)(NSInteger section); //footer
 
-typedef NSString *(^FDSectionHeaderTitle)(NSInteger section); //header
+typedef UIView * (^FDSectionCustomViewForHeader)(NSInteger section); //headerView
 
-typedef NSString * (^FDSectionFooterTitle)(NSInteger section); //footer
+typedef UIView * (^FDSectionCustomViewForFooter)(NSInteger section); //footerView
 
+typedef void (^FDSectionWillDisplayHeaderView)(NSInteger section,UIView *view);
+
+typedef void (^FDSectionWillDisplayFooterView)(NSInteger section,UIView *view);
+
+typedef void (^FDSectionDidEndDisplayingHeaderView)(NSInteger section,UIView *view);
+
+typedef void (^FDSectionDidEndDisplayingFooterView)(NSInteger section,UIView *view);
 
 #endif /* FDSectionHeader_h */
