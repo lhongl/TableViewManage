@@ -8,36 +8,62 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "FDItem.h"
 #import "FDSectionHeader.h"
+@class FDTableViewManage,FDItem;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FDSection : NSObject
 
+@property (nonatomic, weak)FDTableViewManage *tableManage;
+
+/**
+ section下标
+ */
+@property (nonatomic, assign, readonly) NSInteger section;
+
+/**
+ item数量
+ */
 @property (nonatomic, strong, readonly) NSArray <FDItem *> *itemList;
 
+/**
+ header标识符
+ */
 @property (nonatomic, copy, readonly) NSString *sectionHeaderIdent;
 
+/**
+ footer标识符
+ */
 @property (nonatomic, copy, readonly) NSString *sectionFooterIdent;
 
-@property (nonatomic, assign) CGFloat heightForHeader; //headerView高度
+/**
+ headerView高度
+ */
+@property (nonatomic, copy) FDSectionheightForHeader heightForHeader;
 
-@property (nonatomic, assign) CGFloat heightForFooter; //footerView高度
+/**
+ footerView高度
+ */
+@property (nonatomic, copy) FDSectionheightForFooter heightForFooter;
 
-@property (nonatomic, copy) FDSectionTitleForHeader titleForHeader; //headerTitle
+/**
+ headerTitle
+ */
+@property (nonatomic, copy) FDSectionTitleForHeader titleForHeader;
 
-@property (nonatomic, copy) FDSectionTitleForFooter titleForFooter; //footerTitle
+/**
+ footerTitle
+ */
+@property (nonatomic, copy) FDSectionTitleForFooter titleForFooter;
 
-@property (nonatomic, copy) FDSectionWillDisplayHeaderView willDisplayHeaderView;
-
-@property (nonatomic, copy) FDSectionWillDisplayFooterView willDisplayFooterView;
-
-@property (nonatomic, copy) FDSectionDidEndDisplayingHeaderView didEndDisplayingHeaderView;
-
-@property (nonatomic, copy) FDSectionDidEndDisplayingFooterView didEndDisplayingFooterView;
-
+/**
+ 自定义headerView
+ */
 @property (nonatomic, copy) FDSectionCustomViewForHeader customViewForHeader;
 
+/**
+ 自定义footerView
+ */
 @property (nonatomic, copy) FDSectionCustomViewForFooter customViewForFooter;
 
 
@@ -56,31 +82,41 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)remoVeItemWithArray:(NSArray <FDItem *>*)array;
 
-- (void)removeItem:(nullable FDItem *)item;
+- (void)removeItem:(FDItem *)item;
 
 
 /**
  添加item
  */
-- (void)addItem:(nullable FDItem *)item;
+- (void)addItem:(FDItem *)item;
 
-- (void)insertItem:(nullable FDItem *)item atIndex:(NSUInteger)idx;
+- (void)insertItem:(FDItem *)item atIndex:(NSUInteger)idx;
 
 - (void)addItemFromArray:(NSArray <FDItem *>*)array;
+/**
+ 替换item
+ */
+- (void)replaceItemAtIndex:(NSUInteger)index withItem:(FDItem *)item;
 
-
-// ***************************复用 返回headerView和footerView【下方法和属性配合使用】********************
+- (void)replaceItemsWithItemsFromArray:(NSArray <FDItem *>*)otherArray;
+// ***************************列出、返回headerView和footerView【下方法和属性配合使用】********************
 
 /**
   FDSectionHeaderView和FDSectionFooterView
- 【说明】- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass; 属性则无效
+ 【说明】- (void)dequeueReusableHeaderClass:(nullable Class)headerClass footerClass:(nullable Class)footerClass; 不使用则属性无效
  */
-@property (nonatomic, copy) FDSectionViewForHeader viewForHeader;//返回对应headerView
-
-@property (nonatomic, copy) FDSectionViewForFooter viewForFooter;//返回对应footerView
 
 /**
-  复用header和footer
+ 返回对应headerView 【返回可以赋值】
+ */
+@property (nonatomic, copy) FDSectionViewForHeader viewForHeader;
+/**
+ 返回对应footerView 【返回可以赋值】
+ */
+@property (nonatomic, copy) FDSectionViewForFooter viewForFooter;
+
+/**
+  列出header和footer
  @param headerClass header类
  @param footerClass footer类
  */

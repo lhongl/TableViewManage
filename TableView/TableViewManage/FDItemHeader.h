@@ -17,10 +17,7 @@ typedef void (^FDItemDidSelectRow)(__kindof FDTableViewManage *tableVieManager, 
 
 typedef void (^FDItemDidDeselectRow)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item);
 
-typedef void (^FDItemWillDisplayCellRow)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item,__kindof UITableViewCell *cell);
-
 typedef NSArray <UITableViewRowAction *> *(^FDItemEditActions)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item);
 
-typedef void (^FDItemDidEndDisplayingCell)(__kindof FDTableViewManage *tableVieManager, __kindof NSIndexPath *indexPath,__kindof FDItem *item,__kindof UITableViewCell *cell);
 
 #endif /* FDItemHeader_h */

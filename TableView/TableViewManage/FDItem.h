@@ -9,26 +9,43 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "FDItemHeader.h"
-@class FDTableViewManage;
+@class FDSection;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FDItem : NSObject
 
+@property (nonatomic, weak)FDSection *section;
+
+/**
+ row唯一标识符
+ */
 @property (nonatomic, copy, readonly) NSString *cellIdentifier;
 
+/**
+ 高度cell
+ */
 @property (nonatomic, assign) CGFloat rowHeight;
 
-@property (nonatomic, copy) FDItemCellConfiguration cellConfiguration; //加载数据
+/**
+ 加载数据并赋值
+ */
+@property (nonatomic, copy) FDItemCellConfiguration cellConfiguration;
 
-@property (nonatomic, copy) FDItemDidSelectRow didSelectRow; //点击
+/**
+ 点击
+ */
+@property (nonatomic, copy) FDItemDidSelectRow didSelectRow;
 
-@property (nonatomic, copy) FDItemDidDeselectRow didDeselectRow; //已经点击
+/**
+ 已经点击
+ */
+@property (nonatomic, copy) FDItemDidDeselectRow didDeselectRow;
 
-@property (nonatomic, copy) FDItemWillDisplayCellRow willDisplayCellRow;
+/**
+ 侧滑
+ */
 
-@property (nonatomic, copy) FDItemDidEndDisplayingCell didEndDisplayingCellRow;
-
-@property (nonatomic, copy) FDItemEditActions editActions; //侧滑
+@property (nonatomic, copy) FDItemEditActions editActions;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
@@ -39,12 +56,25 @@ NS_ASSUME_NONNULL_BEGIN
  @param cellClass cell类
  @return return
  */
-- (instancetype)initWithData:(nullable id)data cellClass:(nullable Class)cellClass;
+- (instancetype)initWithData:(nullable id)data cellClass:(Class)cellClass;
 
 /**
  返回数据
  */
 - (id)data;
+
+/**
+ indexPath
+ */
+- (NSIndexPath *)indexPath;
+
+/**
+ 回调
+
+ @param tableViewManage 管理
+ @param cell cell
+ */
+- (void)tableViewManage:(FDTableViewManage *)tableViewManage cell:(__kindof UITableViewCell *)cell;
 
 @end
 

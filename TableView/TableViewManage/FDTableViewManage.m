@@ -18,7 +18,7 @@
 - (instancetype)initTableViewManage:(UITableView *)tableView {
     if (self = [super init]) {
         if (tableView) {
-            self.tableView = tableView;
+            _tableView = tableView;
             tableView.delegate = self;
             tableView.dataSource = self;
         }
@@ -27,37 +27,46 @@
 }
 
 #pragma mark cell注册
-- (void)registerCellWithNibName:(nonnull NSString *)nibName{
+- (void)registerCellWithNibName:(NSString *)nibName{
     [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:nibName];
 }
 
-- (void)registerCellWithClass:(nullable Class)cellClass{
+- (void)registerCellWithClass:(Class)cellClass{
     NSString *identifier = NSStringFromClass(cellClass);
     [self.tableView registerClass:cellClass forCellReuseIdentifier:identifier];
 }
 
 #pragma mark header和footer注册
-- (void)registerHeaderFooterViewWithNibName:(nonnull NSString *)nibName{
+- (void)registerHeaderFooterViewWithNibName:(NSString *)nibName{
     [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forHeaderFooterViewReuseIdentifier:nibName];
 }
 
-- (void)registerHeaderFooterViewWithClass:(nullable Class)aClass{
+- (void)registerHeaderFooterViewWithClass:(Class)aClass{
     NSString *identifier = NSStringFromClass(aClass);
     [self.tableView registerClass:aClass forHeaderFooterViewReuseIdentifier:identifier];
 }
 
 #pragma mark 添加section
-- (void)addSection:(nullable FDSection *)section{
+- (void)addSection:(FDSection *)section{
     if (!section) {
 #ifdef DEBUG
         NSAssert(section, @"section Not Null");
 #endif
         return;
     }
+    section.tableManage = self;
     [self.dataArray addObject:section];
 }
-
-- (void)addSection:(nullable FDSection *)section atIndex:(NSUInteger)idx{
+- (void)addSectionsFromArray:(NSArray <FDSection *>*)array{
+    if (array.count == 0) {
+        return;
+    }
+    for (FDSection *section in array){
+        section.tableManage = self;
+    }
+    [self.dataArray addObjectsFromArray:array];
+}
+- (void)addSection:(FDSection *)section atIndex:(NSUInteger)idx{
     if (!section) {
 #ifdef DEBUG
         NSAssert(section, @"section Not Null");
@@ -67,10 +76,12 @@
     
     if (self.dataArray.count < idx) {
 #ifdef DEBUG
-        NSAssert(NO, @"idx problem");
+        NSString *des = [NSString stringWithFormat:@"[__NSArrayI objectAtIndex:]: index %ld beyond bounds [0 .. %ld]",idx,self.dataArray.count];
+        NSAssert(NO, des);
 #endif
         return;
     }
+     section.tableManage = self;
      [self.dataArray insertObject:section atIndex:idx];
 }
 
@@ -79,8 +90,11 @@
     [self.dataArray removeAllObjects];
 }
 
-- (void)remoVeSection:(nullable FDSection *)section{
+- (void)remoVeSection:(FDSection *)section{
     if (!section) {
+#ifdef DEBUG
+        NSAssert(section, @"section Not Null");
+#endif
         return;
     }
     [self.dataArray removeObject:section];
@@ -88,9 +102,46 @@
 
 - (void)remoVeSectionatIndex:(NSUInteger)idx{
     if (self.dataArray.count <= idx) {
+#ifdef DEBUG
+        NSString *des = [NSString stringWithFormat:@"[__NSArrayI objectAtIndex:]: index %ld beyond bounds [0 .. %ld]",idx,self.dataArray.count - 1];
+        NSAssert(NO, des);
+#endif
         return;
     }
     [self.dataArray removeObjectAtIndex:idx];
+}
+
+#pragma mark 替换section
+- (void)replaceSectionAtIndex:(NSUInteger)index withSection:(FDSection *)section{
+    if (!section) {
+#ifdef DEBUG
+        NSAssert(section, @"section Not Null");
+#endif
+        return;
+    }
+    if (self.dataArray.count <= index) {
+#ifdef DEBUG
+        NSString *des = [NSString stringWithFormat:@"[__NSArrayI objectAtIndex:]: index %ld beyond bounds [0 .. %ld]",index,self.dataArray.count - 1];
+        NSAssert(NO, des);
+#endif
+        return;
+    }
+    section.tableManage = self;
+    [self.dataArray replaceObjectAtIndex:index withObject:section];
+}
+
+- (void)replaceSectionsWithSectionsFromArray:(NSArray <FDSection *>*)otherArray{
+    if (otherArray.count == 0) {
+        return;
+    }
+    [self removeAllSection];
+    [self addSectionsFromArray:otherArray];
+}
+
+#pragma mark 获取sections
+- (NSArray <FDSection *>*)sections{
+    
+    return _dataArray;
 }
 
 #pragma mark tableView代理
@@ -104,52 +155,12 @@
     return self.dataArray.count;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    FDSection *fdSection = self.dataArray[indexPath.section];
-    FDItem *item  = fdSection.itemList[indexPath.row];
-    if (item.willDisplayCellRow) {
-        item.willDisplayCellRow(self, indexPath, item,cell);
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
-    FDSection *fdSection = self.dataArray[indexPath.section];
-    FDItem *item  = fdSection.itemList[indexPath.row];
-    if (item.didEndDisplayingCellRow) {
-        item.didEndDisplayingCellRow(self, indexPath, item,cell);
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    FDSection *fdSection = self.dataArray[section];
-    if (fdSection.willDisplayHeaderView) {
-        fdSection.willDisplayHeaderView(section,view);
-    }
-}
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
-    FDSection *fdSection = self.dataArray[section];
-    if (fdSection.willDisplayFooterView) {
-        fdSection.willDisplayFooterView(section,view);
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section {
-    FDSection *fdSection = self.dataArray[section];
-    if (fdSection.didEndDisplayingHeaderView) {
-        fdSection.didEndDisplayingHeaderView(section,view);
-    }
-}
-- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section {
-    FDSection *fdSection = self.dataArray[section];
-    if (fdSection.didEndDisplayingFooterView) {
-        fdSection.didEndDisplayingFooterView(section,view);
-    }
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FDSection *fdSection = self.dataArray[indexPath.section];
     FDItem *item  = fdSection.itemList[indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:item.cellIdentifier forIndexPath:indexPath];
+    [item tableViewManage:self cell:cell];
     if (item.cellConfiguration) {
         item.cellConfiguration(self, cell, item);
     }
@@ -164,6 +175,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (self.dataArray.count == 0) {
+#ifdef DEBUG
+        NSAssert(NO, @"dataArray not nil");
+#endif
+        return;
+    }
     FDSection *fdSection = self.dataArray[indexPath.section];
     FDItem *item  = fdSection.itemList[indexPath.row];
     if (item.didSelectRow) {
@@ -187,9 +204,12 @@
     }
     
     if (fdSection.sectionHeaderIdent.length == 0) {
-        return nil;
+        return [UIView new];
     }
     UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionHeaderIdent];
+    if (headerView == nil) {
+        headerView = [UIView new];
+    }
     if (fdSection.viewForHeader) {
         fdSection.viewForHeader(headerView, section);
     }
@@ -208,7 +228,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    return fdSection.heightForHeader;
+    if (fdSection.heightForHeader) {
+       return fdSection.heightForHeader(section);
+    }
+    return 0.0f;
 }
 
 
@@ -221,13 +244,16 @@
     }
     
     if (fdSection.sectionFooterIdent.length == 0) {
-        return nil;
+        return [UIView new];
     }
-    UIView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionFooterIdent];
+    UIView *footererView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:fdSection.sectionFooterIdent];
+    if (footererView == nil) {
+        footererView = [UIView new];
+    }
     if (fdSection.viewForFooter) {
-         fdSection.viewForFooter(headerView, section);
+         fdSection.viewForFooter(footererView, section);
     }
-    return headerView;
+    return footererView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
@@ -241,7 +267,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
     FDSection *fdSection = self.dataArray[section];
-    return fdSection.heightForFooter;
+    if (fdSection.heightForFooter) {
+      return fdSection.heightForFooter(section);
+    }
+    return 0.0f;
 }
 
 - (NSArray*)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -261,6 +290,18 @@
         return YES;
     }
     return NO;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.tableViewScrollBlock) {
+        self.tableViewScrollBlock(scrollView);
+    }
+}
+
+- (void)scrollToTopAnimated:(BOOL)animated{
+    UIEdgeInsets insets = self.tableView.contentInset;
+    [self.tableView setContentOffset:CGPointMake(0.0, insets.top) animated:animated];
 }
 
 #pragma mark 懒加载

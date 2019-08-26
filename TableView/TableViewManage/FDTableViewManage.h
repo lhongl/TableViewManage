@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
+@property (nonatomic, copy) void(^ tableViewScrollBlock)(UIScrollView *_Nullable scrollView);
+
 /**
  初始化tableView
  
@@ -30,28 +32,28 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param nibName nib名字
  */
-- (void)registerCellWithNibName:(nonnull NSString *)nibName;
+- (void)registerCellWithNibName:(NSString *)nibName;
 
 /**
  cell注册
  
  @param cellClass 类名
  */
-- (void)registerCellWithClass:(nullable Class)cellClass;
+- (void)registerCellWithClass:(Class)cellClass;
 
 /**
  header和footer注册
  
  @param nibName nib名字
  */
-- (void)registerHeaderFooterViewWithNibName:(nonnull NSString *)nibName;
+- (void)registerHeaderFooterViewWithNibName:(NSString *)nibName;
 
 /**
  header和footer注册
  
  @param aClass 类名
  */
-- (void)registerHeaderFooterViewWithClass:(nullable Class)aClass;
+- (void)registerHeaderFooterViewWithClass:(Class)aClass;
 
 
 /**
@@ -59,18 +61,38 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param section 添加section
  */
-- (void)addSection:(nullable FDSection *)section;
+- (void)addSection:(FDSection *)section;
 
-- (void)addSection:(nullable FDSection *)section atIndex:(NSUInteger)idx;
+- (void)addSectionsFromArray:(NSArray <FDSection *>*)array;
+
+- (void)addSection:(FDSection *)section atIndex:(NSUInteger)idx;
 
 /**
  删除
  */
-- (void)remoVeSection:(nullable FDSection *)section;
+- (void)remoVeSection:(FDSection *)section;
 
 - (void)removeAllSection;
 
 - (void)remoVeSectionatIndex:(NSUInteger)idx;
+/**
+ 替换
+ */
+- (void)replaceSectionAtIndex:(NSUInteger)index withSection:(FDSection *)section;
+
+- (void)replaceSectionsWithSectionsFromArray:(NSArray <FDSection *>*)otherArray;
+
+
+/**
+ 获取sections
+ */
+- (NSArray <FDSection *>*)sections;
+
+/**
+ Scroll to top.
+ */
+- (void)scrollToTopAnimated:(BOOL)animated;
+
 
 @end
 
